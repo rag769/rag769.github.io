@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://cdn.jsdelivr.net/npm/luxon@3.4.4"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-luxon@1.3.1"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-luxon@1.3.1"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chartjs-chart-financial@0.2.1/dist/chartjs-chart-financial.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <title>Candlestick | RO Package Exchange Rate</title>
+</head>
+
+<body>
+  <div style="width:1000px">
+    <canvas id="chart"></canvas>
+  </div>
+  <script type="text/javascript">
+    const item_id = new URL(decodeURIComponent(document.location.href)).searchParams.get("item_id");
+    const name = new URL(decodeURIComponent(document.location.href)).searchParams.get("item_name") || item_id;
+    if (item_id) {
+      var trade_log = {};
+      console.log(`${location.href.split('/').slice(0, -1).join('/')}/candlestick/${item_id}.json`)
+      axios.get(`${location.href.split('/').slice(0, -1).join('/')}/candlestick/${item_id}.json`).then(res => {
+        trade_log = Object.values(res.data);
+        trade_log.sort((a, b) => { return a.x - b.x })
+        const ctx = document.getElementById('chart').getContext('2d');
+        ctx.canvas.width = 1000;
+        ctx.canvas.height = 500;
+        var chart = new Chart(ctx, {
+          type: 'candlestick',
+          data: {
+            datasets: [{
+              label: name,
+              data: trade_log,
+            }]
+          }
+        });
+      });
+    }
+  </script>
+</body>
+
+</html>
