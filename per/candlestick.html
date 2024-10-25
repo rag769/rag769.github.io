@@ -14,7 +14,7 @@
 </head>
 
 <body>
-  <div style="width:1000px">
+  <div style="max-width:1000px">
     <canvas id="chart"></canvas>
   </div>
   <script type="text/javascript">
@@ -22,13 +22,10 @@
     const name = new URL(decodeURIComponent(document.location.href)).searchParams.get("item_name") || item_id;
     if (item_id) {
       var trade_log = {};
-      console.log(`${location.href.split('/').slice(0, -1).join('/')}/candlestick/${item_id}.json`)
       axios.get(`${location.href.split('/').slice(0, -1).join('/')}/candlestick/${item_id}.json`).then(res => {
         trade_log = Object.values(res.data);
         trade_log.sort((a, b) => { return a.x - b.x })
         const ctx = document.getElementById('chart').getContext('2d');
-        ctx.canvas.width = 1000;
-        ctx.canvas.height = 500;
         var chart = new Chart(ctx, {
           type: 'candlestick',
           data: {
