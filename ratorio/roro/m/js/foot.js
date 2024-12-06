@@ -31109,24 +31109,46 @@ function OnClickSimulateCastTimeStop(castTime, delayTime) {
 	objInput.setAttribute("value", "詠唱!!");
 	objInput.setAttribute("onClick", "OnClickSimulateCastTimeStart(" + castTime + ", " + delayTime + ")");
 }
+
+const percentFormatter = (val)=> {
+	return val + "%";
+};
+const presenceFormatter = (val)=> {
+	return val? "あり":"なし";
+};
+const mdefFormatter = (val) => {
+	// MDEF無視はBOSSとか種族とか色々ある
+	// 計算対象のモンスターに依存して面倒なので
+	// 全モンスター(普通のエンチャ):295と全属性(TWO):298
+	return val + n_tok[ITEM_SP_IGNORE_MDEF_RACE_ALL];
+}
+const defFormatter = (val) => {
+	// DEF無視はBOSSとか種族とか色々ある
+	// 計算対象のモンスターに依存して面倒なので
+	// 全モンスター(普通のエンチャ):290と全属性(TWO):293
+	return val + n_tok[ITEM_SP_IGNORE_DEF_RACE_ALL];
+}
+
 const footer_items = [
 	{id:-1,text:""},
-	{id:77,text:"ボス耐性"},
-	{id:78,text:"遠距離耐性"},
-	{id:79,text:"一般耐性"},
-	{id:89,text:"[魔法]ダメージUP"},
-	{id:96,text:"[魔法]BOSSﾀﾞﾒｰｼﾞUP"},
-	{id:23,text:"錐効果"},
-	{id:80,text:"[物理]ダメージUP"},
-	{id:210,text:"[物理]近接UP"},
-	{id:25,text:"[物理]遠距離UP"},
-	{id:70,text:"[物理]クリUP"},
-	{id:26,text:"[物理]BOSSダメージUP"},
+	{id:ITEM_SP_RESIST_BOSS,text:"ボス耐性"},
+	{id:ITEM_SP_RESIST_NOTBOSS,text:"一般耐性"},
+	{id:ITEM_SP_RESIST_LONGRANGE,text:"遠距離耐性"},
+	{id:ITEM_SP_IGNORE_MDEF_ALL,text:"[物理]MDEF無視",formatter:mdefFormatter},
+	{id:ITEM_SP_MAGICAL_DAMAGE_UP,text:"[魔法]ダメージUP"},
+	{id:ITEM_SP_MAGICAL_DAMAGE_UP_BOSS,text:"[魔法]BOSSダメUP"},
+	{id:ITEM_SP_KIRI_EFFECT,text:"錐効果",formatter:presenceFormatter},
+	{id:ITEM_SP_IGNORE_DEF_ALL,text:"[物理]DEF無視",formatter:defFormatter},
+	{id:ITEM_SP_PHYSICAL_DAMAGE_UP,text:"[物理]ダメUP"},
+	{id:ITEM_SP_SHORTRANGE_DAMAGE_UP,text:"[物理]近接UP"},
+	{id:ITEM_SP_LONGRANGE_DAMAGE_UP,text:"[物理]遠距離UP"},
+	{id:ITEM_SP_CRITICAL_DAMAGE_UP,text:"[物理]クリダメUP"},
+	{id:ITEM_SP_PHYSICAL_DAMAGE_UP_BOSS,text:"[物理]BOSSダメUP"},
 ];
 const footer_items_map = (() => {
 	const m = {};
 	footer_items.forEach((e)=>{
-		m[e.id] = e.text;
+		m[e.id] = e;
 	});
 	return m;
 })();
@@ -31157,7 +31179,7 @@ $(document).on("change", ".footer_item_select", (e)=>{
 	$items.data("items", ($items.data("items")||"")+","+$(e.target).val());
 	$(".footer_items",$(e.target).closest(".footer_row")).append(`
 		<span class="CSSCLS_BATTLE_TINY_LABEL">${$("option:selected",$(e.target)).text()}</span>
-		<span class="CSSCLS_BATTLE_TINY_VALUE">${n_tok[$(e.target).val()]}</span>
+		<span class="CSSCLS_BATTLE_TINY_VALUE">${formattedValue($(e.target).val(),n_tok[$(e.target).val()])}</span>
 	`)
 	$("option:selected",$(e.target)).prop('disabled', true);
 	$(e.target).val(-1);
@@ -31171,10 +31193,14 @@ function rebuildFooter(){
 		items_text.split(",").forEach((v)=>{
 			if(v) {
 				$(".footer_items",e).append(`
-					<span class="CSSCLS_BATTLE_TINY_LABEL">${footer_items_map[v]||""}</span>
-					<span class="CSSCLS_BATTLE_TINY_VALUE">${n_tok[v]}</span>
+					<span class="CSSCLS_BATTLE_TINY_LABEL">${footer_items_map[v].text||""}</span>
+					<span class="CSSCLS_BATTLE_TINY_VALUE">${formattedValue(v, n_tok[v])}</span>
 				`);
 			}
 		});
 	});
+}
+function formattedValue(id, v) {
+	const formatter = footer_items_map[id].formatter||percentFormatter;
+	return formatter(v);
 }
