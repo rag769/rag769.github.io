@@ -22467,6 +22467,7 @@ g_ITEM_SP_SKILL_CAST_TIME_value_forCalcData = w;
 		// 拡張表示を更新
 		CFloatingInfoAreaComponentManager.setReferData(charaData, n_tok, mobData);
 		CFloatingInfoAreaComponentManager.RefreshDispAreaAll();
+		rebuildFooter();
 	}
 
 
@@ -31107,4 +31108,73 @@ function OnClickSimulateCastTimeStop(castTime, delayTime) {
 	objInput = document.getElementById("OBJID_BUTTON_SIMULATE_CAST_TIME");
 	objInput.setAttribute("value", "詠唱!!");
 	objInput.setAttribute("onClick", "OnClickSimulateCastTimeStart(" + castTime + ", " + delayTime + ")");
+}
+const footer_items = [
+	{id:-1,text:""},
+	{id:77,text:"ボス耐性"},
+	{id:78,text:"遠距離耐性"},
+	{id:79,text:"一般耐性"},
+	{id:89,text:"[魔法]ダメージUP"},
+	{id:96,text:"[魔法]BOSSﾀﾞﾒｰｼﾞUP"},
+	{id:23,text:"錐効果"},
+	{id:80,text:"[物理]ダメージUP"},
+	{id:210,text:"[物理]近接UP"},
+	{id:25,text:"[物理]遠距離UP"},
+	{id:70,text:"[物理]クリUP"},
+	{id:26,text:"[物理]BOSSダメージUP"},
+];
+const footer_items_map = (() => {
+	const m = {};
+	footer_items.forEach((e)=>{
+		m[e.id] = e.text;
+	});
+	return m;
+})();
+
+function createAllItemOptionsHtml(){
+	let html = "";
+	footer_items.forEach((e,i)=>{
+		html += `<option value="${e.id}">${e.text}</option>`
+	});
+	return html;
+}
+$("#footer_row_add").click(()=>{
+	$(`
+<div class="footer_row" style="display:flex">
+	<div class="footer_items"></div>
+	<select class="footer_item_select">
+		${createAllItemOptionsHtml()}
+	</select>
+	<button type="button" class="footer_row_del">－</button>
+</div>
+	`).appendTo("#footer_rows_area");
+});
+$(document).on("click", ".footer_row_del", (e)=>{
+	$(e.target).closest(".footer_row").remove();
+});
+$(document).on("change", ".footer_item_select", (e)=>{
+	const $items = $(".footer_items",$(e.target).closest(".footer_row"));
+	$items.data("items", ($items.data("items")||"")+","+$(e.target).val());
+	$(".footer_items",$(e.target).closest(".footer_row")).append(`
+		<span class="CSSCLS_BATTLE_TINY_LABEL">${$("option:selected",$(e.target)).text()}</span>
+		<span class="CSSCLS_BATTLE_TINY_VALUE">${n_tok[$(e.target).val()]}</span>
+	`)
+	$("option:selected",$(e.target)).prop('disabled', true);
+	$(e.target).val(-1);
+});
+function rebuildFooter(){
+	$(".footer_row").each((i,e) => {
+		console.log(e);
+		const items_text = $(".footer_items",e).data("items");
+		console.log(items_text);
+		$(".footer_items span",e).remove();
+		items_text.split(",").forEach((v)=>{
+			if(v) {
+				$(".footer_items",e).append(`
+					<span class="CSSCLS_BATTLE_TINY_LABEL">${footer_items_map[v]||""}</span>
+					<span class="CSSCLS_BATTLE_TINY_VALUE">${n_tok[v]}</span>
+				`);
+			}
+		});
+	});
 }
