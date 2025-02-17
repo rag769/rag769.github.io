@@ -12,13 +12,11 @@ ROラトリオHub 2025/02/05 20:00 版
 
 ## Setup
 
-* DevTool用
+* DevToolでもアドレスバーでもどちらでも (ブラウザによっては全文コピペできません。Bookmarkletとしての利用を推奨) 
 
-    > $.getScript("https://rag769.github.io/extras/ratorio/compare_calc.js");
-
-* アドレスバー用 (ブラウザによっては全文コピペできません)  
-
-    > javascript:(function(){$.getScript("https://rag769.github.io/extras/ratorio/compare_calc.js");})();
+    ````
+    javascript:(function(){$.getScript("https://rag769.github.io/extras/ratorio/compare_calc.min.js");})();
+    ````
 
 ## How to use
 
