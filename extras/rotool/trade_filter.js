@@ -32,15 +32,15 @@ $(function () {
             $(".max_price .money").text(`${trades[trades.length - 1].toLocaleString()}zeny`);
         });
         const rebuild = () => {
-            if ($("#Normal_Coefficient").data("loading")) {
-                setTimeout(rebuild, 100);
+            if ($("#trade_log>*:first").data("loading")) {
+                setTimeout(rebuild, 500);
                 return;
             }
             buildSelectOptions();
         }
         $(".item_filter input[type=checkbox]").click(() => {
-            $("#Normal_Coefficient").data("loading", "loading");
-            setTimeout(rebuild, 100);
+            $("#trade_log>*:first").data("loading", "loading");
+            rebuild();
         });
         rebuild();
     })();
