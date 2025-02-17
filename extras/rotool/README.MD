@@ -1,17 +1,30 @@
 # RO非公式RO公式ツール拡張：露店取引情報フィルタ
 
-露店取引情報にエンチャント・カードのフィルタ機能を付加します。
+露店取引情報にエンチャント・カードのフィルタ機能を付加します。  
+グラフ表示をおまけで追加
 
 
 ## Setup
 
-* DevTool用
+* DevTool用  
+    フィルタのみ
+    ```
+    $.getScript("https://rag769.github.io/extras/rotool/trade_filter.min.js");
+    ```
+    フィルタ＋グラフ
+    ```
+    $.getScript("https://rag769.github.io/extras/rotool/trade_filter_scatter.min.js");
+    ```
 
-    > $.getScript("https://rag769.github.io/extras/rotool/trade_filter.js");
-
-* アドレスバー用 (ブラウザによっては全文コピペできません)  
-
-    > javascript:(function(){$.getScript("https://rag769.github.io/extras/rotool/trade_filter.js");})();
+* アドレスバー用 (ブラウザによっては全文コピペできません。Bookmarkletとしての利用を推奨)  
+    フィルタのみ
+    ```
+    javascript:(function(){$.getScript("https://rag769.github.io/extras/rotool/trade_filter.min.js");})();
+    ```
+    フィルタ＋グラフ
+    ```
+    javascript:(function(){$.getScript("https://rag769.github.io/extras/rotool/trade_filter_scatter.min.js");})();
+    ```
 
 ## How to use
 
