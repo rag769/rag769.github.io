@@ -6,17 +6,7 @@
 
 ## Setup
 
-* DevTool用  
-    フィルタのみ
-    ```
-    $.getScript("https://rag769.github.io/extras/rotool/trade_filter.min.js");
-    ```
-    フィルタ＋グラフ
-    ```
-    $.getScript("https://rag769.github.io/extras/rotool/trade_filter_scatter.min.js");
-    ```
-
-* アドレスバー用 (ブラウザによっては全文コピペできません。Bookmarkletとしての利用を推奨)  
+* DevToolでもアドレスバーでもどちらでも (ブラウザによっては全文コピペできません。Bookmarkletとしての利用を推奨)  
     フィルタのみ
     ```
     javascript:(function(){$.getScript("https://rag769.github.io/extras/rotool/trade_filter.min.js");})();
