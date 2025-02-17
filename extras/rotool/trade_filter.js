@@ -9,7 +9,15 @@ $(function () {
             $("#Normal_Coefficient > table > tbody > tr > td:first-child > div").each((i, el) => {
                 if ($(el).text().indexOf(item_name) == -1) options.add($(el).text());
             });
-            options.forEach((option) => {
+            Array.from(options).sort((a,b)=>{
+                a = String(a).replace("%","").split("+");
+                b = String(b).replace("%","").split("+");
+                if (a.length==1 || b.length==1 || a[0] != b[0]) {
+                    return a[0] < b[0]?-1:1;
+                } else {
+                    return a[1]-b[1];
+                }
+            }).forEach((option) => {
                 $("#extras_ro_card_enchant_select").append($('<option>').val(option).text(option));
             });
         }
