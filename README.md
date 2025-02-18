@@ -14,5 +14,6 @@
 
 [ROラトリオHub拡張](https://github.com/rag769/rag769.github.io/blob/main/extras/ratorio/README.MD)
 
-[RO公式ツール拡張](https://github.com/rag769/rag769.github.io/blob/main/extras/rotool/README.MD
+[RO公式ツール拡張](https://github.com/rag769/rag769.github.io/blob/main/extras/rotool/README.MD)
+
 
