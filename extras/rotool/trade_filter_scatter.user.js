@@ -93,9 +93,12 @@
         if (trades.length) {
             trades.sort((a, b) => a - b);
             const half = (trades.length % 2 ? trades.length - 1 : trades.length) / 2;
-            $(".median_price .money").text(`${trades[half].toLocaleString()}zeny`);
-            $(".min_price .money").text(`${trades[0].toLocaleString()}zeny`);
-            $(".max_price .money").text(`${trades[trades.length - 1].toLocaleString()}zeny`);
+            $("#Normal_Coefficient_Summary .median_price .money").text(`${trades[half].toLocaleString()}zeny`);
+            $("#Normal_Coefficient_Summary .min_price .money").text(`${trades[0].toLocaleString()}zeny`);
+            $("#Normal_Coefficient_Summary .max_price .money").text(`${trades[trades.length - 1].toLocaleString()}zeny`);
+            $("#Noatun_Coefficient_Summary .median_price .money").text(`${Math.ceil(trades[half]/1000).toLocaleString()}zeny`);
+            $("#Noatun_Coefficient_Summary .min_price .money").text(`${Math.ceil(trades[0]/1000).toLocaleString()}zeny`);
+            $("#Noatun_Coefficient_Summary .max_price .money").text(`${Math.ceil(trades[trades.length - 1]/1000).toLocaleString()}zeny`);
         }
         if(scatter) {
             scatter.data.datasets[0].data = scatter_trade_data;
