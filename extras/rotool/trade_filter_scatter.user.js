@@ -90,6 +90,13 @@
                 scatter_trade_data.push(trade);
             }
         });
+        $("#Noatun_Coefficient > table > tbody > tr").each((i, tr) => {
+            if (filter != "none" && $("td:first-child > div", tr).text().indexOf(filter) < 0) {
+                $(tr).hide();
+            } else {
+                $(tr).show();
+            }
+        });
         if (trades.length) {
             trades.sort((a, b) => a - b);
             const half = (trades.length % 2 ? trades.length - 1 : trades.length) / 2;
