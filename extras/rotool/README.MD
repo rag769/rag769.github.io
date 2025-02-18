@@ -5,6 +5,9 @@
 
 
 ## Setup
+* Greaseonkey・Tampermonkey UserScript (作者は Tampermonkey で確認)  
+    * [フィルタのみ](https://rag769.github.io/extras/rotool/trade_filter.user.js)
+    * [フィルタ＋グラフ](https://rag769.github.io/extras/rotool/trade_filter_scatter.user.js)
 
 * DevToolでもアドレスバーでもどちらでも (ブラウザによっては全文コピペできません。Bookmarkletとしての利用を推奨)  
     フィルタのみ
@@ -17,6 +20,7 @@
     ```
 
 ## How to use
+※ XxxmonkeyのUserScriptをインストールしている場合は普通に無視してください ※
 
 1. RO公式ツールでアイテム検索します
 
