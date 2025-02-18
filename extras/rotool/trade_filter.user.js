@@ -42,6 +42,13 @@
                 trades.push(parseInt($($("td", tr)[1]).text().replaceAll(",", "").replace("zeny", "")));
             }
         });
+        $("#Noatun_Coefficient > table > tbody > tr").each((i, tr) => {
+            if (filter != "none" && $("td:first-child > div", tr).text().indexOf(filter) < 0) {
+                $(tr).hide();
+            } else {
+                $(tr).show();
+            }
+        });
         trades.sort((a, b) => a - b);
         const half = (trades.length % 2 ? trades.length - 1 : trades.length) / 2;
         $("#Normal_Coefficient_Summary .median_price .money").text(`${trades[half].toLocaleString()}zeny`);
