@@ -4,6 +4,12 @@
 グラフ表示をおまけで追加(サンプル画像グリーンでマスク)
 ![サンプル画像](ss.png)
 
+### 2025－02－28 Update
+
+フィルタをカードとエンチャで分離 (AND条件)
+
+![サンプル画像](ff.png)
+
 ## Setup
 * Greaseonkey・Tampermonkey UserScript (作者は Tampermonkey で確認)  
     * [フィルタのみ](https://rag769.github.io/extras/rotool/trade_filter.user.js)
