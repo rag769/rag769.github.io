@@ -89,7 +89,7 @@
         });
         if (trades.length) {
             trades.sort((a, b) => a - b);
-            half = (trades.length % 2 ? trades.length - 1 : trades.length) / 2;
+            const half = (trades.length % 2 ? trades.length - 1 : trades.length) / 2;
             $("#Normal_Coefficient_Summary .median_price .money").text(`${trades[half].toLocaleString()}zeny`);
             $("#Normal_Coefficient_Summary .min_price .money").text(`${trades[0].toLocaleString()}zeny`);
             $("#Normal_Coefficient_Summary .max_price .money").text(`${trades[trades.length - 1].toLocaleString()}zeny`);
