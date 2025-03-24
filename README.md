@@ -12,7 +12,7 @@
 
 ## 非公式拡張始めました
 
-[ROラトリオHub拡張](https://github.com/rag769/rag769.github.io/blob/main/extras/ratorio/README.MD)
+~~ROラトリオHub拡張~~ 終了しました
 
 [RO公式ツール拡張](https://github.com/rag769/rag769.github.io/blob/main/extras/rotool/README.MD)
 
