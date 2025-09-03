@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://bulma.io/vendor/fontawesome-free-6.5.2-web/css/all.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@1.0.4/css/bulma.min.css">
+  <title>rag769</title>
+  <style>
+    html, body{
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+      background: #EFF3F4;
+      height: 100%;
+    }
+    .wrapper {
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+    .hero .tabs li.is-active a {
+      color: lightgray;
+      /* border-color: white; */
+      background-color: transparent;
+    }
+    .card-image > .fa {
+        font-size: 8rem;
+        padding-top: 2rem;
+        padding-bottom: 2rem;
+        color: rgb(32, 156, 238);
+    }
+    .features {
+      padding: 5rem 0;
+    }
+  </style>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const navbarBurger = document.querySelector('.navbar-burger');
+      const navbarMenu = document.querySelector('#navbarMenu');
+
+      navbarBurger.addEventListener('click', () => {
+        navbarBurger.classList.toggle('is-active');
+        navbarMenu.classList.toggle('is-active');
+      });
+    });
+  </script>
+</head>
+
+<body>
+  <div class="wrapper">
+  <section class="hero is-info is-medium">
+    <!-- Hero head: will stick at the top -->
+    <div class="hero-head">
+      <nav class="navbar">
+        <div class="container">
+          <div class="navbar-brand">
+            <span class="navbar-burger" data-target="navbarMenu">
+              <span></span>
+              <span></span>
+              <span></span>
+              <span></span>
+            </span>
+          </div>
+          <div id="navbarMenu" class="navbar-menu">
+            <div class="navbar-end">
+              <div class="tabs is-right">
+                <ul>
+                  <li class="is-active"><a>Home</a></li>
+                  <li><a href="https://rag769.github.io/fog">FOG</a></li>
+                  <li><a href="https://rag769.github.io/per">PER</a></li>
+                  <li><a href="href="https://github.com/rag769/rag769.github.io/blob/main/extras/rotool/README.MD" target="_blank">Tools<span class="icon"
+                ><i class="fas fa-external-link-alt"></i></span></a></li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </div>
+
+    <!-- Hero content: will be in the middle -->
+    <div class="hero-body">
+      <div class="container has-text-centered">
+        <p class="title">rag769</p>
+        <p class="subtitle">Ragnarok Online の何か適当な情報</p>
+      </div>
+    </div>
+  </section>
+  <br />
+  <div class="container">
+    <div id="app">
+      <div class="columns features">
+          <div class="column is-4">
+              <div class="card is-shady">
+                  <div class="card-image has-text-centered">
+                      <i class="fa fa-paw"></i>
+                  </div>
+                  <div class="card-content">
+                      <div class="content">
+                          <h4>欲まみれ</h4>
+                          <p>主要な金策MD(主にカード)のボスで期待できるカードの市場価格調査</p>
+                          <p><a href="https://rag769.github.io/fog">Full Of Greed</a></p>
+                      </div>
+                  </div>
+              </div>
+          </div>
+          <div class="column is-4">
+              <div class="card is-shady">
+                  <div class="card-image has-text-centered">
+                      <i class="fa fa-money-bill-1-wave"></i>
+                  </div>
+                  <div class="card-content">
+                      <div class="content">
+                          <h4>1万円の価値</h4>
+                          <p>直近数年のパッケージ(アニバパッケ、夏パッケ)の市場価格調査</p>
+                          <p><a href="https://rag769.github.io/per">Package Exchange Rate</a></p>
+                      </div>
+                  </div>
+              </div>
+          </div>
+          <div class="column is-4">
+              <div class="card is-shady">
+                  <div class="card-image has-text-centered">
+                      <i class="fa fa-screwdriver-wrench"></i>
+                  </div>
+                  <div class="card-content">
+                      <div class="content">
+                          <h4> Extra tools</h4>
+                          <p>その他何か作ったもの<br><br></p>
+                          <p><a href="href="https://github.com/rag769/rag769.github.io/blob/main/extras/rotool/README.MD">Learn more</a></p>
+                      </div>
+                  </div>
+              </div>
+          </div>
+      </div>
+    </div>
+  </div>
+  <br />
+  <footer class="footer is-small">
+    <div class="content has-text-centered">
+      © Gravity Co., Ltd. & Lee MyoungJin(studio DTDS). All rights reserved.<br />
+      © GungHo Online Entertainment, Inc. All Rights Reserved.<br />
+      当コンテンツの再利用（再転載・配布など）は、禁止しています。
+    </div>
+  </footer>
+  </div>
+</body>
+
+</html>
