@@ -4,15 +4,109 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
-  <title>Full of Greed</title>
-  <script type="module" crossorigin src="./assets/index-d11d0b3c.js"></script>
-  <link rel="stylesheet" href="./assets/index-cb47e6df.css">
+  <link rel="stylesheet" href="https://bulma.io/vendor/fontawesome-free-6.5.2-web/css/all.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@1.0.4/css/bulma.min.css">
+  <title>欲まみれ</title>
+  <style>
+    html,
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+      background: #EFF3F4;
+      height: 100%;
+    }
+
+    .wrapper {
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    .hero.is-link .tabs li.is-active a {
+      color: gray;
+      /* border-color: white; */
+      background-color: transparent;
+    }
+
+    .card-image>.fa {
+      font-size: 8rem;
+      padding-top: 2rem;
+      padding-bottom: 2rem;
+      color: rgb(32, 156, 238);
+    }
+
+    .features {
+      padding: 5rem 0;
+    }
+  </style>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const navbarBurger = document.querySelector('.navbar-burger');
+      const navbarMenu = document.querySelector('#navbarMenu');
+
+      navbarBurger.addEventListener('click', () => {
+        navbarBurger.classList.toggle('is-active');
+        navbarMenu.classList.toggle('is-active');
+      });
+    });
+  </script>
+  <script type="module" crossorigin src="./assets/index-17c2050f.js"></script>
+  <link rel="stylesheet" href="./assets/index-9d6ec544.css">
 </head>
 
 <body>
-  <div id="app"></div>
+  <div class="wrapper">
+    <section class="hero is-link is-small">
+      <!-- Hero head: will stick at the top -->
+      <div class="hero-head">
+        <nav class="navbar">
+          <div class="container">
+            <div class="navbar-brand">
+              <span class="navbar-burger" data-target="navbarMenu">
+                <span></span>
+                <span></span>
+                <span></span>
+                <span></span>
+              </span>
+            </div>
+            <div id="navbarMenu" class="navbar-menu">
+              <div class="navbar-end">
+                <div class="tabs is-right">
+                  <ul>
+                    <li><a href="https://rag769.github.io/">Home</a></li>
+                    <li class="is-active"><a>FOG</a></li>
+                    <li><a href="https://rag769.github.io/per">PER</a></li>
+                    <li><a href="https://github.com/rag769/rag769.github.io/blob/main/extras/rotool/README.MD"
+                        target="_blank">Tools<span class="icon"><i class="fas fa-external-link-alt"></i></span></a></li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </nav>
+      </div>
 
+      <!-- Hero content: will be in the middle -->
+      <div class="hero-body">
+        <div class="container">
+          <p class="title">欲まみれ</p>
+          <p class="subtitle">Full of Greed</p>
+        </div>
+      </div>
+    </section>
+    <br />
+    <div class="container">
+      <div id="app"></div>
+      
+    </div>
+    <br />
+    <footer class="footer is-small">
+      <div class="content has-text-centered">
+        © Gravity Co., Ltd. & Lee MyoungJin(studio DTDS). All rights reserved.<br />
+        © GungHo Online Entertainment, Inc. All Rights Reserved.<br />
+        当コンテンツの再利用（再転載・配布など）は、禁止しています。
+      </div>
+    </footer>
+  </div>
 </body>
 
 </html>
