@@ -9,7 +9,7 @@ $(function () {
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style>
         :root {
-            --sidebar-width: 500px;
+            --sidebar-width: 450px;
             --header-height: 60px;
             --footer-height: 85px;
         }
@@ -156,11 +156,6 @@ $(function () {
             updateButton($leftSidebar, 'left', $leftBtn);
             updateButton($rightSidebar, 'right', $rightBtn);
         });
-        function clear_search_result() {
-            $("#item_name").val("");
-            $("#item_list_output").html("");
-            $("#item_list_output2").empty();
-        };
     </script>
 <script>
 //パラメーターを作る関数
@@ -514,10 +509,20 @@ function parameter_search(item_id,make_flag=0){
         $(".item_description").removeClass("item_description");
         $(".sidebar-content.search").prepend(`
 <div class="search-form-box">
-<p><input name="item" class="search_box item_name item_description" id="item_name" onkeydown="complementary_search(event,1);complementary_search_description(event, 1);" placeholder="キーワードを入力してください。" autocomplete="off" enterkeyhint="done"></p>
-<p><input type="button" class="reset-btn" value="✕" onclick="clear_search_result();" /></p>
+<p><input name="item" class="search_box item_name item_description" id="item_name" placeholder="キーワードを入力してください。" autocomplete="off" enterkeyhint="done"></p>
+<p><input type="button" class="reset-btn" value="✕" /></p>
 </div>
 `);
+        $(document).on("click", ".reset-btn", function () {
+            $(".search_box.item_name.item_description").val("");
+            $("#item_list_output").html("");
+            $("#item_list_output2").empty();
+        });
+
+        $(document).on("keydown", "#item_name", function (e) {
+            complementary_search(e, 1);
+            complementary_search_description(e, 1);
+        });
         $("#item_list_output").parent().appendTo("#name_tab");
         $("#item_list_output2").parent().appendTo("#description_tab");
         const visualize_trade_log = () => {
