@@ -385,7 +385,7 @@ function over_wrrite_trade_log_summary(trade_log_summary,param){
 /*
  *アイテム
 */
-function parameter_search(){
+function parameter_search(item_id, make_flag){
     //出力先を代入する
     let trade_log = document.getElementById('trade_log')
     let trade_log_summary = document.getElementById('trade_log_summary')
@@ -396,7 +396,7 @@ function parameter_search(){
     var grade_level = document.getElementsByClassName('grade_level');
 
     //必ず毎回初期化する
-    var param = 'item_id=470390&make_flag=0';
+    var param = "item_id=" + item_id + "&make_flag=" + make_flag;
     //モンスターサイズのパラメター作成
     param = make_prameter(param,'refining_level',refining_level);
     param = make_prameter(param,'card_flg',card_flg);
@@ -530,7 +530,7 @@ function parameter_search(){
                 $.getScript("https://rotool.gungho.jp/js/itemdetial.js?ver=5.0.0", () => {
                     display_none('item-drop-monster-list');
                     display_none('item-drop-map-list');
-                    parameter_search();
+                    parameter_search(link.dataset.id, link.dataset.make_flag);
                 });
                 const $title = $('#center_content h1.conent-ttl');
                 Object.entries(link.dataset).forEach(([key, val]) => $title.data(key, val));
@@ -607,4 +607,5 @@ function parameter_search(){
             displayFavorite();
         });
     })();
+
 });
