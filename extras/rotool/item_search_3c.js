@@ -1,6 +1,9 @@
 $(function () {
     (() => {
         if ($('#center_content').length > 0) return;
+        $('.site-logo').parent().html(function(_, html) {
+            return html.replace('公式ツール', '公式ツール [非公式拡張]');
+        });
         const meta = `
     <link rel="stylesheet" href="https://code.jquery.com/ui/1.14.1/themes/base/jquery-ui.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
@@ -772,3 +775,4 @@ function parameter_search(item_id,make_flag=0){
         });
     })();
 });
+
