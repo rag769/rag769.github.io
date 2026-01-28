@@ -3,6 +3,7 @@ $(function () {
         if ($('#center_content').length > 0) return;
         const meta = `
     <link rel="stylesheet" href="https://code.jquery.com/ui/1.14.1/themes/base/jquery-ui.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style>
         :root {
             --sidebar-width: 500px;
@@ -152,7 +153,261 @@ $(function () {
             updateButton($leftSidebar, 'left', $leftBtn);
             updateButton($rightSidebar, 'right', $rightBtn);
         });
+        function clear_search_result() {
+            $("#item_name").val("");
+            $("#item_list_output").html("");
+            $("#item_list_output2").empty();
+        };
     </script>
+<script>
+//パラメーターを作る関数
+function make_prameter(param,param_name,param_array){
+    for ( i = 0; i < param_array.length; i++) {
+        if ( param_array[i].checked === true ) {
+            if(param){
+                param += "&" + param_name + "[]=" + param_array[i].value;
+            }else{
+                param = "" + param_name + "[]=" + param_array[i].value;
+            }
+        }
+    }
+    return param;
+}
+//パラメーターを作る関数(HP)
+function make_hp_prameter(param,param_name,param_array){
+    if (param_array[0].value) {
+        if(param){
+            param += "&" + param_name + "=" + param_array[0].value;
+        }else{
+            param = "" + param_name + "=" + param_array[0].value;
+        }
+    }
+    return param;
+}
+
+//パラメータがある場合に取引履歴を上書きする関数
+function over_wrrite_trade_log(trade_log,param){
+
+
+    //アイテムグレードの設定の宣言
+                        var Item_Grade_Level = {};
+            Item_Grade_Level[0] = 'なし';
+                                Item_Grade_Level[1] = '★1';
+                                Item_Grade_Level[2] = '★2';
+                                Item_Grade_Level[3] = '★3';
+                                Item_Grade_Level[4] = '★4';
+            
+    
+    //パラメーターが選択されいた場合
+    if(param){
+        // Ajaxリクエスト
+        $.ajax({
+        type: "GET",
+        url: "/item_trade_log_filtered_search/?" + param,
+        dataType : "json",
+        cahe:false
+        })
+        // Ajaxリクエストが成功した場合
+        .done(function(data){
+            var html = "";
+            if(data == "none" ){
+                html = '<p class="alert_msg">露店取引情報が見つかりません。</p>';
+                trade_log.innerHTML = html
+                return;
+            }
+            //アイテムが見つかった場合の処理
+            //通常価格
+            html += '<div id="Normal_Coefficient" class="status-table">';
+            html += '<table>';
+            html += '<thead><tr><th>取引実績</th><th>価格(単価)</th><th>個数</th><th>日時</th><th>MAP</th></tr></thead>';
+            for(var i=0; i<data.length; i++){
+                html += '<tr><td>';
+                if(data[i].GradeLevel>0){ html += '<div>超越段階　' + Item_Grade_Level[data[i].GradeLevel] + '</div>'; }
+                if(data[i].refining_level>0){ html += '<div> + ' + data[i].refining_level + '　' + data[i].item_name + '</div>'; }
+                else{ html += '<div>' + data[i].item_name + '</div>'; }
+                if(data[i].card1){ html += '<div>' + data[i].card1 + '</div>'; }
+                if(data[i].card2){ html += '<div>' + data[i].card2 + '</div>'; }
+                if(data[i].card3){ html += '<div>' + data[i].card3 + '</div>'; }
+                if(data[i].card4){ html += '<div>' + data[i].card4 + '</div>'; }
+                if(data[i].RandOption1){ html += '<div>' + data[i].RandOption1 + '</div>'; }
+                if(data[i].RandOption2){ html += '<div>' + data[i].RandOption2 + '</div>'; }
+                if(data[i].RandOption3){ html += '<div>' + data[i].RandOption3 + '</div>'; }
+                if(data[i].RandOption4){ html += '<div>' + data[i].RandOption4 + '</div>'; }
+                if(data[i].RandOption5){ html += '<div>' + data[i].RandOption5 + '</div>'; }
+                if(data[i].attribute_stone){ html += '<div>属性石　' + data[i].attribute_stone + '</div>'; }
+                if(data[i].star_piece){ html += '<div>星のかけら　' + data[i].star_piece + '</div>'; }
+                html += '</td>';
+                html += '<td><div class="money">'+ Math.ceil(data[i].price / data[i].item_count).toLocaleString() + 'zeny</div></td>';
+                html += '<td>' + data[i].item_count + '</td>';
+                html += '<td>' + data[i].log_date.substring(0,16) + '</td>';
+                html += '<td>' + data[i].mapname + '</td>';
+                html += '</tr>';
+            }
+            html += '</table>';
+            html += '</div>';
+            //Noatun価格
+            html += '<div id="Noatun_Coefficient" class="status-table">';
+            html += '<table>';
+            html += '<thead><tr><th>取引実績</th><th>価格(単価)</th><th>個数</th><th>日時</th><th>MAP</th></tr></thead>';
+            for(var i=0; i<data.length; i++){
+                html += '<tr><td>';
+                if(data[i].GradeLevel>0){ html += '<div>超越段階　' + Item_Grade_Level[data[i].GradeLevel] + '</div>'; }
+                if(data[i].refining_level>0){ html += '<div> + ' + data[i].refining_level + '　' + data[i].item_name + '</div>'; }
+                else{ html += '<div>' + data[i].item_name + '</div>'; }
+                if(data[i].card1){ html += '<div>' + data[i].card1 + '</div>'; }
+                if(data[i].card2){ html += '<div>' + data[i].card2 + '</div>'; }
+                if(data[i].card3){ html += '<div>' + data[i].card3 + '</div>'; }
+                if(data[i].card4){ html += '<div>' + data[i].card4 + '</div>'; }
+                if(data[i].RandOption1){ html += '<div>' + data[i].RandOption1 + '</div>'; }
+                if(data[i].RandOption2){ html += '<div>' + data[i].RandOption2 + '</div>'; }
+                if(data[i].RandOption3){ html += '<div>' + data[i].RandOption3 + '</div>'; }
+                if(data[i].RandOption4){ html += '<div>' + data[i].RandOption4 + '</div>'; }
+                if(data[i].RandOption5){ html += '<div>' + data[i].RandOption5 + '</div>'; }
+                if(data[i].attribute_stone){ html += '<div>属性石　' + data[i].attribute_stone + '</div>'; }
+                if(data[i].star_piece){ html += '<div>星のかけら　' + data[i].star_piece + '</div>'; }
+                html += '</td>';
+                //単価が0円未満の場合unavaliableを表示する
+                if(data[i].price / data[i].item_count / 1000>1){
+                    html += '<td><div class="money">'+ Math.ceil(data[i].price / data[i].item_count / 1000).toLocaleString() + 'zeny</div></td>';
+                }else{
+                    html += '<td><div class="money">unavaliable</div></td>';
+                }
+                html += '<td>' + data[i].item_count + '</td>';
+                html += '<td>' + data[i].log_date.substring(0,16) + '</td>';
+                html += '<td>' + data[i].mapname + '</td>';
+                html += '</tr>';
+            }
+            html += '</table>';
+            html += '</div>';
+
+            trade_log.innerHTML = html
+        })
+        // Ajaxリクエストが失敗した場合
+        .fail(function(XMLHttpRequest, textStatus, errorThrown){
+            var html = '<p class="alert_msg">通信に失敗しました。時間をおいてお試しください。</p>';
+            trade_log.innerHTML = html
+        });
+    //1度でもパラメーター選択後に条件が指定されていなかった場合
+    }else{
+        html = '<p class="alert_msg">条件が指定されていません。</p>';
+            trade_log.innerHTML = html
+            return;
+    }
+}
+//パラメータがある場合に取引サマリーを上書きする関数
+function over_wrrite_trade_log_summary(trade_log_summary,param){
+    //パラメーターが選択されいた場合
+    if(param){
+        // Ajaxリクエスト
+        $.ajax({
+        type: "GET",
+        url: "/item_trade_log_summary_filtered_search/?" + param,
+        dataType : "json"
+        })
+        // Ajaxリクエストが成功した場合
+        .done(function(data){
+            var html = "";
+            if(data == "none" ){
+                //UI的におかしいので何も出力させない
+                html = '';
+                trade_log_summary.innerHTML = html
+                return;
+            }
+            //アイテムが見つかった場合の処理
+            //通常価格
+            html += '<div id="Normal_Coefficient_Summary" class="transaction-summary">';
+            html += '<h4>取引概要</h4>';
+            html += '<div class="summary_price">';
+            html += '<div class="median_price">';
+            html += '<p class="summary_price_label">中央値</p>';
+            html += '<p class="money">'+ Math.ceil(data.median).toLocaleString() + 'zeny</p>';
+            html += '</div>';
+            html += '<div class="min_price">';
+            html += '<p class="summary_price_label">最低値</p>';
+            html += '<p class="money">'+ Math.ceil(data.min).toLocaleString() + 'zeny</p>';
+            html += '</div>';
+            html += '<div class="max_price">';
+            html += '<p class="summary_price_label">最高値</p>';
+            html += '<p class="money">'+ Math.ceil(data.max).toLocaleString() + 'zeny</p>';
+            html += '</div>';
+            html += '</div>';
+            html += '</div>';
+            //Noatun価格
+            html += '<div id="Noatun_Coefficient_Summary" class="transaction-summary">';
+            html += '<h4>取引概要(Noatun価格)</h4>';
+            html += '<div class="summary_price">';
+            html += '<div class="median_price">';
+            html += '<p class="summary_price_label">中央値</p>';
+            //単価が0円未満の場合unavaliableを表示する
+            if(data.median / 1000>1){
+                html += '<p class="money">'+ Math.ceil(data.median / 1000).toLocaleString() + 'zeny</p>';
+            }else{
+                html += '<p class="money">unavaliable</p>';
+            }
+            html += '</div>';
+            html += '<div class="min_price">';
+            html += '<p class="summary_price_label">最低値</p>';
+            //単価が0円未満の場合unavaliableを表示する
+            if(data.min / 1000>1){
+                html += '<p class="money">'+ Math.ceil(data.min / 1000).toLocaleString() + 'zeny</p>';
+            }else{
+                html += '<p class="money">unavaliable</p>';
+            }
+            html += '</div>';
+            html += '<div class="max_price">';
+            html += '<p class="summary_price_label">最高値</p>';
+            //単価が0円未満の場合unavaliableを表示する
+            if(data.max / 1000>1){
+                html += '<p class="money">'+ Math.ceil(data.max / 1000).toLocaleString() + 'zeny</p>';
+            }else{
+                html += '<p class="money">unavaliable</p>';
+            }
+            html += '</div>';
+            html += '</div>';
+            html += '</div>';
+
+            trade_log_summary.innerHTML = html
+        })
+        // Ajaxリクエストが失敗した場合
+        .fail(function(XMLHttpRequest, textStatus, errorThrown){
+            var html = '<p class="alert_msg">通信に失敗しました。時間をおいてお試しください。</p>';
+            trade_log_summary.innerHTML = html
+        });
+    //1度でもパラメーター選択後に条件が指定されていなかった場合
+    }else{
+        //UI的におかしいので何も出力させない
+        html = '';
+        trade_log_summary.innerHTML = html
+        return;
+    }
+}
+
+/*
+ *アイテム
+*/
+function parameter_search(){
+    //出力先を代入する
+    let trade_log = document.getElementById('trade_log')
+    let trade_log_summary = document.getElementById('trade_log_summary')
+
+    //パラメーターを取得する
+    var refining_level = document.getElementsByClassName('refining_level');
+    var card_flg = document.getElementsByClassName('card_flg');
+    var grade_level = document.getElementsByClassName('grade_level');
+
+    //必ず毎回初期化する
+    var param = 'item_id=470390&make_flag=0';
+    //モンスターサイズのパラメター作成
+    param = make_prameter(param,'refining_level',refining_level);
+    param = make_prameter(param,'card_flg',card_flg);
+    param = make_prameter(param,'grade_level',grade_level);
+
+
+    //アイテムの取引履歴
+    over_wrrite_trade_log(trade_log,param);
+    over_wrrite_trade_log_summary(trade_log_summary,param);
+};
+</script>
 `;
         const titlebar_side_left = `
             <div class="titlebar-side">
@@ -213,7 +468,15 @@ $(function () {
                         </ul>
                         <div id="history_tab"></div>
                         <div id="featured_tab"></div>
-                        <div id="favorite_tab">Not implemented</div>
+                        <div id="favorite_tab">
+                            <section class="content-wrap">
+                                <h3 class="section-ttl_mini">お気に入り</h3>
+                                <div class="result-list">
+                                    <ul id="favorite-list">
+                                    </ul>
+                                </div>
+                            </section>
+                        </div>
                     </div>
                 </div>
             </aside>
@@ -240,11 +503,6 @@ $(function () {
         // 左カラム
         $(".item_name").removeClass("item_name");
         $(".item_description").removeClass("item_description");
-        const clear_search_result = () => {
-            $("#item_name").val("");
-            $("#item_list_output").html("");
-            $("#item_list_output2").empty();
-        };
         $(".sidebar-content.search").prepend(`
 <div class="search-form-box">
 <p><input name="item" class="search_box item_name item_description" id="item_name" onkeydown="complementary_search(event,1);complementary_search_description(event, 1);" placeholder="キーワードを入力してください。" autocomplete="off" enterkeyhint="done"></p>
@@ -269,8 +527,84 @@ $(function () {
             $.get(link.href, function (data) {
                 const article = $(data).find('article');
                 $('#center_content').html(article);
-                $('.content-wrap.transaction-wrap').hide();
+                $.getScript("https://rotool.gungho.jp/js/itemdetial.js?ver=5.0.0", () => {
+                    display_none('item-drop-monster-list');
+                    display_none('item-drop-map-list');
+                    parameter_search();
+                });
+                const $title = $('#center_content h1.conent-ttl');
+                Object.entries(link.dataset).forEach(([key, val]) => $title.data(key, val));
+                if (existsInFavorite($title.data('name'))) {
+                    $('#center_content h1.conent-ttl').append('<i class="fav-icon fas fa-star" style="cursor:pointer; margin-left:10px; color: #f1c40f"></i>');
+                } else {
+                    $('#center_content h1.conent-ttl').append('<i class="fav-icon far fa-star" style="cursor:pointer; margin-left:10px;"></i>');
+                }
             });
         }, true);
+        const FAVO_KEY = 'item_favorite';
+        function loadFavorite() {
+            try {
+                const rawFavorite = localStorage.getItem(FAVO_KEY);
+                if (rawFavorite) {
+                    const favorite = JSON.parse(rawFavorite);
+                    if (Array.isArray(favorite)) {
+                        return favorite;
+                    }
+                }
+            } catch (e) { /* fail silent */ }
+            return [];
+        }
+        function displayFavorite() {
+            let item_list = document.getElementById('favorite-list');
+            const favorite = loadFavorite(); // オブジェクトの配列を取得
+
+            var html = "";
+
+            favorite.forEach(item => {
+                // item と item.name が存在するかチェック
+                if (item && item.item_name) {
+                    html += '<li><span class="icon-item"><img src="/images/item_icon/' + item.item_icon + '.png"></span><a href="' + item.item_id + '/' + item.make_flag + '/" class="history-link" data-id="' + item.item_id + '" data-name="' + item.item_name + '" data-make_flag="' + item.make_flag + '" data-icon="' + item.item_icon + '" >' + item.item_name + '</a></li>';
+                }
+            });
+            item_list.innerHTML = html;
+        }
+        displayFavorite();
+        function existsInFavorite(itemName) {
+            const favorite = loadFavorite();
+            return favorite.some(item => item.item_name === itemName);
+        }
+        function saveFavorite(itemObject, add = true) {
+            if (!itemObject || !itemObject.item_name) return; // 項目名がなければ何もしない
+            try {
+                let favorite = loadFavorite();
+                favorite = favorite.filter(item => item.item_name !== itemObject.item_name);
+                if (add) {
+                    favorite.push(itemObject);
+                }
+                localStorage.setItem(FAVO_KEY, JSON.stringify(favorite));
+            } catch (e) {
+                console.error('お気に入りの保存に失敗しました。', e);
+            }
+        }
+
+        $(document).on('click', '.fav-icon', function () {
+            $(this).toggleClass('fas fa-star'); // 塗りつぶしアイコン
+            $(this).toggleClass('far fa-star'); // 枠線アイコン
+            const $title = $('#center_content h1.conent-ttl')
+            const itemObject = {
+                item_name: $title.data('name').replace(/</g, '＜').replace(/>/g, '＞'),
+                item_id: $title.data('id'),
+                make_flag: $title.data('make_flag'),
+                item_icon: $title.data('icon')
+            };
+            if ($(this).hasClass('fas')) {
+                saveFavorite(itemObject, true);
+                $(this).css('color', '#f1c40f');
+            } else {
+                saveFavorite(itemObject, false);
+                $(this).css('color', '#ccc');
+            }
+            displayFavorite();
+        });
     })();
 });
