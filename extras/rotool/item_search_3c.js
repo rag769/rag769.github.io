@@ -534,7 +534,7 @@ function parameter_search(item_id,make_flag=0){
             var costume = document.getElementsByClassName('costume1');
             var param = '';
             param = make_text_prameter(param, 'item_name', name_text);
-            param = make_prameter_item(param, 'costume', costume);
+            // param = make_prameter_item(param, 'costume', costume);
 
             if (param) {
                 $.ajax({
@@ -581,7 +581,7 @@ function parameter_search(item_id,make_flag=0){
                 param = param.replace('[', '［')
                 param = param.replace(']', '］')
             }
-            param = make_prameter_item(param, 'costume', costume);
+            // param = make_prameter_item(param, 'costume', costume);
 
             if (param) {
                 $.ajax({
