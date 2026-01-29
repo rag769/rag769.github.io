@@ -1,7 +1,7 @@
 $(function () {
     (() => {
         if ($('#center_content').length > 0) return;
-        $('.site-logo').parent().html(function(_, html) {
+        $('.site-logo').parent().html(function (_, html) {
             return html.replace('公式ツール', '公式ツール [非公式拡張]');
         });
         const meta = `
@@ -171,18 +171,6 @@ function make_prameter(param,param_name,param_array){
     }
     return param;
 }
-//パラメーターを作る関数(HP)
-function make_hp_prameter(param,param_name,param_array){
-    if (param_array[0].value) {
-        if(param){
-            param += "&" + param_name + "=" + param_array[0].value;
-        }else{
-            param = "" + param_name + "=" + param_array[0].value;
-        }
-    }
-    return param;
-}
-
 //パラメータがある場合に取引履歴を上書きする関数
 function over_wrrite_trade_log(trade_log,param){
 
@@ -519,6 +507,109 @@ function parameter_search(item_id,make_flag=0){
             $("#item_list_output2").empty();
         });
 
+        function make_prameter_item(param, param_name, param_array) {
+            if (param_array[0].checked == true) {
+                if (param) {
+                    param += "&" + param_name + "=" + 1;
+                } else {
+                    param = "" + param_name + "=" + 1;
+                }
+            }
+            return param;
+        }
+        function make_text_prameter(param, param_name, param_array) {
+            if (param_array[0].value) {
+                if (param) {
+                    param += "&" + param_name + "=" + param_array[0].value;
+                } else {
+                    param = "" + param_name + "=" + param_array[0].value;
+                }
+            }
+            return param;
+        }
+        function complementary_search(event, flg = false) {
+            if (event.keyCode !== 13 && flg == 1) { return; }
+            let item_list = document.getElementById('item_list_output');
+            var name_text = document.getElementsByClassName('item_name');
+            var costume = document.getElementsByClassName('costume1');
+            var param = '';
+            param = make_text_prameter(param, 'item_name', name_text);
+            param = make_prameter_item(param, 'costume', costume);
+
+            if (param) {
+                $.ajax({
+                    type: "GET",
+                    url: "/item/prediction_conversion_search_name/?" + param,
+                    dataType: "json",
+                    cache: false
+                })
+                    .done(function (data) {
+                        var html = "";
+                        if (data == "none") {
+                            html += '<li class="alert_msg">ご指定のキーワードではアイテムが見つかりませんでした。</li>';
+                            item_list.innerHTML = html
+                            return;
+                        }
+                        for (var i = 0; i < data.length; i++) {
+                            //検索履歴用にアイテム検索から遷移したフラグをsessionStorageに入れる
+                            // html += '<li class="search_result"><span class="icon-item"><img src="/images/item_icon/'+ data[i].item_icon + '.png"></span><a href="'+ data[i].item_id + '/'+ data[i].make_flag + '/" onclick="sessionStorage.setItem(\'came_from_results\', \'true\')" >' + data[i].item_name + '</a></li>';
+                            html += '<li class="search_result"><span class="icon-item"><img src="/images/item_icon/' + data[i].item_icon + '.png"></span><a href="' + data[i].item_id + '/' + data[i].make_flag + '/" class="history-link" data-id="' + data[i].item_id + '" data-name="' + data[i].item_name + '" data-make_flag="' + data[i].make_flag + '" data-icon="' + data[i].item_icon + '" >' + data[i].item_name + '</a></li>';
+                        }
+                        item_list.innerHTML = html
+
+                    })
+                    .fail(function (XMLHttpRequest, textStatus, errorThrown) {
+                        var html = '<p class="alert_msg">通信に失敗しました。時間をおいてお試しください。</p>';
+                        item_list.innerHTML = html
+                    });
+            }
+        };
+        function complementary_search_description(event, flg = false) {
+            if (event.keyCode !== 13 && flg == 1) { return; }
+
+            let description_text = document.getElementsByClassName('item_description');
+            var costume = document.getElementsByClassName('costume2');
+            let item_list = document.getElementById('item_list_output2');
+
+            var param = '';
+            param = make_text_prameter(param, 'item_description', description_text);
+            if (param) {
+                param = param.replace('%', '-パーセント-')
+                param = param.replace('％', '-パーセント-')
+                param = param.replace('+', '-プラス-')
+                param = param.replace('＋', '-プラス-')
+                param = param.replace('[', '［')
+                param = param.replace(']', '］')
+            }
+            param = make_prameter_item(param, 'costume', costume);
+
+            if (param) {
+                $.ajax({
+                    type: "GET",
+                    url: "/item/prediction_conversion_search_description/?" + param,
+                    dataType: "json"
+                })
+                    .done(function (data) {
+                        var html = "";
+                        if (data == "none") {
+                            html += '<li class="alert_msg">ご指定のキーワードではアイテムが見つかりませんでした。</li>';
+                            item_list.innerHTML = html
+                            return;
+                        }
+                        for (var i = 0; i < data.length; i++) {
+                            html += '<li class="search_result"><span class="icon-item"><img src="/images/item_icon/' + data[i].item_icon + '.png"></span><a href="' + data[i].item_id + '/' + data[i].make_flag + '/" class="history-link" data-id="' + data[i].item_id + '" data-name="' + data[i].item_name + '" data-make_flag="' + data[i].make_flag + '" data-icon="' + data[i].item_icon + '" >' + data[i].item_name + '</a> ' + data[i].description_search + '</li>';
+                        }
+                        item_list.innerHTML = html
+
+                    })
+                    // Ajaxリクエストが失敗した場合
+                    .fail(function (XMLHttpRequest, textStatus, errorThrown) {
+                        var html = '<p class="alert_msg">通信に失敗しました。時間をおいてお試しください。</p>';
+                        item_list.innerHTML = html
+                    });
+            }
+        };
+
         $(document).on("keydown", "#item_name", function (e) {
             complementary_search(e, 1);
             complementary_search_description(e, 1);
@@ -526,7 +617,7 @@ function parameter_search(item_id,make_flag=0){
         $("#item_list_output").parent().appendTo("#name_tab");
         $("#item_list_output2").parent().appendTo("#description_tab");
         const visualize_trade_log = () => {
-            if ($("#extras_ro_card_enchant_select_box").length>0) return;
+            if ($("#extras_ro_card_enchant_select_box").length > 0) return;
             const scatter_data = {
                 datasets: [{
                     label: "",
@@ -534,64 +625,66 @@ function parameter_search(item_id,make_flag=0){
                 }]
             };
             let scatter = null;
-            $.getScript("https://cdn.jsdelivr.net/npm/chart.js", ()=>{$.getScript("https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns", ()=>{
-                $("#trade_log").before(`<canvas id="trade_scatter"></canvas>`);
-                scatter = new Chart(document.getElementById('trade_scatter').getContext('2d'), {
-                    type: 'scatter',
-                    data: scatter_data,
-                    options: {
-                        scales: {
-                            x: {
-                                type: 'time',
-                                time: {
-                                    unit: 'day',
-                                    tooltipFormat: 'yyyy-MM-dd HH:mm',
-                                    displayFormats: {
-                                        day: 'yyyy-MM-dd'
+            $.getScript("https://cdn.jsdelivr.net/npm/chart.js", () => {
+                $.getScript("https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns", () => {
+                    $("#trade_log").before(`<canvas id="trade_scatter"></canvas>`);
+                    scatter = new Chart(document.getElementById('trade_scatter').getContext('2d'), {
+                        type: 'scatter',
+                        data: scatter_data,
+                        options: {
+                            scales: {
+                                x: {
+                                    type: 'time',
+                                    time: {
+                                        unit: 'day',
+                                        tooltipFormat: 'yyyy-MM-dd HH:mm',
+                                        displayFormats: {
+                                            day: 'yyyy-MM-dd'
+                                        }
+                                    },
+                                    title: {
+                                        display: true,
+                                        text: '日時'
                                     }
                                 },
-                                title: {
-                                    display: true,
-                                    text: '日時'
+                                y: {
+                                    title: {
+                                        display: true,
+                                        text: '単価'
+                                    }
                                 }
                             },
-                            y: {
-                                title: {
-                                    display: true,
-                                    text: '単価'
-                                }
+                            plugins: {
+                                legend: {
+                                    display: false
+                                },
                             }
                         },
-                        plugins: {
-                            legend: {
-                                display: false
-                            },
-                        }
-                    },
-                });
-                filter_history();
-            })});
-            const card_keywords=["カード","アクエリアス","アリエス","ヴァルゴ","ヴァルゴの欠片","カプリコーン","キャンサー","サーペンタリウス","サジタリウス","ジェミニ","スコーピオ","タウロス","パイシーズ","リーブラ","レオ","レオの欠片","覇者の思念","魔神の幸運","魔神の集中","魔神の迅速","魔神の体力","魔神の知力","魔神の腕力"];
+                    });
+                    filter_history();
+                })
+            });
+            const card_keywords = ["カード", "アクエリアス", "アリエス", "ヴァルゴ", "ヴァルゴの欠片", "カプリコーン", "キャンサー", "サーペンタリウス", "サジタリウス", "ジェミニ", "スコーピオ", "タウロス", "パイシーズ", "リーブラ", "レオ", "レオの欠片", "覇者の思念", "魔神の幸運", "魔神の集中", "魔神の迅速", "魔神の体力", "魔神の知力", "魔神の腕力"];
             const get_item_option = () => {
                 const cards = new Set();
                 const enchants = new Set();
                 const item_name = $("#center_content .conent-ttl").text();
                 $("#Normal_Coefficient > table > tbody > tr:not([style*='display: none']) > td:first-child > div").each((i, el) => {
-                    if ($(el).text().indexOf(item_name) == -1){
-                        if (card_keywords.find((s) => {return $(el).text().indexOf(s)>=0})) {
+                    if ($(el).text().indexOf(item_name) == -1) {
+                        if (card_keywords.find((s) => { return $(el).text().indexOf(s) >= 0 })) {
                             cards.add($(el).text());
                         } else {
                             enchants.add($(el).text());
                         }
                     }
                 });
-                const sort = (a,b)=> {
-                    a = String(a).replace("%","").split("+");
-                    b = String(b).replace("%","").split("+");
-                    if (a.length==1 || b.length==1 || a[0] != b[0]) {
-                        return a[0] < b[0]?-1:1;
+                const sort = (a, b) => {
+                    a = String(a).replace("%", "").split("+");
+                    b = String(b).replace("%", "").split("+");
+                    if (a.length == 1 || b.length == 1 || a[0] != b[0]) {
+                        return a[0] < b[0] ? -1 : 1;
                     } else {
-                        return a[1]-b[1];
+                        return a[1] - b[1];
                     }
                 }
                 return [Array.from(cards).sort(sort), Array.from(enchants).sort(sort)];
@@ -600,16 +693,16 @@ function parameter_search(item_id,make_flag=0){
                 let cards, enchants;
                 [cards, enchants] = get_item_option();
                 $("#extras_ro_card_enchant_select_box").remove();
-                if (cards.length+enchants.length>0) {
+                if (cards.length + enchants.length > 0) {
                     $(".card_flg:last").parent().after(`<div id="extras_ro_card_enchant_select_box"><h4>フィルタ</h4></div>`);
                 }
-                if (cards.length>0) {
+                if (cards.length > 0) {
                     $("#extras_ro_card_enchant_select_box").append(`<select id="extras_ro_card_select" style="width:20em;color:#666;padding: 0.4em 1em; border-radius: 20px;border:1px solid;background:#fff"><option value="">カード指定なし</option><option value="nocard">カードなし</option></select>`);
-                    cards.forEach((t)=>{$("#extras_ro_card_select").append($('<option>').val(t).text(t))})
+                    cards.forEach((t) => { $("#extras_ro_card_select").append($('<option>').val(t).text(t)) })
                 }
-                if (enchants.length>0) {
+                if (enchants.length > 0) {
                     $("#extras_ro_card_enchant_select_box").append(`<select id="extras_ro_enchant_select" style="width:20em;color:#666;margin-left:0.5em;padding: 0.4em 1em; border-radius: 20px;border:1px solid;background:#fff"><option value="">エンチャント指定なし</option></select>`);
-                    enchants.forEach((t)=>{$("#extras_ro_enchant_select").append($('<option>').val(t).text(t))})
+                    enchants.forEach((t) => { $("#extras_ro_enchant_select").append($('<option>').val(t).text(t)) })
                 }
             }
             const filter_history = () => {
@@ -622,7 +715,7 @@ function parameter_search(item_id,make_flag=0){
                     let enchant_hit = false;
                     $("td:first-child > div", tr).each((j, div) => {
                         if (card_filter == "nocard") {
-                            card_hit = card_hit && !card_keywords.find((s) => {return $(div).text().indexOf(s)>=0})
+                            card_hit = card_hit && !card_keywords.find((s) => { return $(div).text().indexOf(s) >= 0 })
                         } else {
                             card_hit = card_hit || ($(div).text().indexOf(card_filter) >= 0);
                         }
@@ -633,7 +726,7 @@ function parameter_search(item_id,make_flag=0){
                         $($("#Noatun_Coefficient > table > tbody > tr")[i]).show();
                         const td = $("td", tr);
                         trades.push(parseInt($($("td", tr)[1]).text().replaceAll(",", "").replace("zeny", "")));
-                        const trade = {x:"", y:0};
+                        const trade = { x: "", y: 0 };
                         trade.y = parseInt($($("td", tr)[1]).text().replaceAll(",", "").replace("zeny", ""))
                         trade.x = new Date($($("td", tr)[3]).text().replace(" ", "T"));
                         scatter_trade_data.push(trade);
@@ -648,9 +741,9 @@ function parameter_search(item_id,make_flag=0){
                     $("#Normal_Coefficient_Summary .median_price .money").text(`${trades[half].toLocaleString()}zeny`);
                     $("#Normal_Coefficient_Summary .min_price .money").text(`${trades[0].toLocaleString()}zeny`);
                     $("#Normal_Coefficient_Summary .max_price .money").text(`${trades[trades.length - 1].toLocaleString()}zeny`);
-                    $("#Noatun_Coefficient_Summary .median_price .money").text(`${Math.ceil(trades[half]/1000).toLocaleString()}zeny`);
-                    $("#Noatun_Coefficient_Summary .min_price .money").text(`${Math.ceil(trades[0]/1000).toLocaleString()}zeny`);
-                    $("#Noatun_Coefficient_Summary .max_price .money").text(`${Math.ceil(trades[trades.length - 1]/1000).toLocaleString()}zeny`);
+                    $("#Noatun_Coefficient_Summary .median_price .money").text(`${Math.ceil(trades[half] / 1000).toLocaleString()}zeny`);
+                    $("#Noatun_Coefficient_Summary .min_price .money").text(`${Math.ceil(trades[0] / 1000).toLocaleString()}zeny`);
+                    $("#Noatun_Coefficient_Summary .max_price .money").text(`${Math.ceil(trades[trades.length - 1] / 1000).toLocaleString()}zeny`);
                 } else {
                     $("#Normal_Coefficient_Summary .median_price .money").text("N/A");
                     $("#Normal_Coefficient_Summary .min_price .money").text("N/A");
@@ -659,14 +752,14 @@ function parameter_search(item_id,make_flag=0){
                     $("#Noatun_Coefficient_Summary .min_price .money").text("N/A");
                     $("#Noatun_Coefficient_Summary .max_price .money").text("N/A");
                 }
-                if(scatter) {
+                if (scatter) {
                     scatter.data.datasets[0].data = scatter_trade_data;
                     scatter.update();
                 }
             }
             $(document).on("change", "#extras_ro_card_select,#extras_ro_enchant_select", filter_history);
             const rebuild = () => {
-                if ($("#trade_log>*:first").length==0||$("#trade_log>*:first").data("loading")) {
+                if ($("#trade_log>*:first").length == 0 || $("#trade_log>*:first").data("loading")) {
                     setTimeout(rebuild, 100);
                     return;
                 }
