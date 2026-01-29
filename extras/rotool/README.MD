@@ -61,7 +61,7 @@
 
 フィルタをカードとエンチャで分離 (AND条件)
 
-![サンプル画像](imagess/ff.png)
+![サンプル画像](images/ff.png)
 
 ## Setup
 * Greaseonkey・Tampermonkey UserScript (作者は Tampermonkey で確認)  
