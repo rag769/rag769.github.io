@@ -96,6 +96,7 @@ $(function () {
             transition: all 0.3s ease;
             padding: 24px;
             box-shadow: inset 0 0 0 1px #e5e7eb;
+            min-width: 0;
         }
 
         /* 隠す時のクラス */
