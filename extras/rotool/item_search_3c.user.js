@@ -4,7 +4,7 @@
 // @description RO公式ツール アイテム検索を画面遷移不要の3カラムに再構成
 // @author      rag769
 // @match       https://rotool.gungho.jp/item/
-// @version     2026-01-30
+// @version     1.0.0
 // @require     https://code.jquery.com/jquery-3.7.1.min.js
 // @require     https://code.jquery.com/ui/1.14.1/jquery-ui.min.js
 // @require     https://rotool.gungho.jp/js/itemdetial.js
@@ -433,21 +433,6 @@ function parameter_search(item_id,make_flag=0){
 `;
     const contents = `
     <div class="app">
-        <!-- <header class="titlebar">
-            <div class="titlebar-side">
-                <button class="title-btn" id="toggleLeft" type="button" aria-expanded="true"
-                    aria-controls="leftSidebar">
-                    <span class="icon">✕</span>
-                </button>
-            </div>
-            <div class="titlebar-title">非公式ツール</div>
-            <div class="titlebar-side right">
-                <button class="title-btn" id="toggleRight" type="button" aria-expanded="false"
-                    aria-controls="rightSidebar">
-                    <span class="icon">≡</span>
-                </button>
-            </div>
-        </header> -->
         <div class="container">
             <aside class="sidebar left-sidebar" id="leftSidebar" aria-hidden="false">
                 <div class="sidebar-content search">
@@ -455,9 +440,16 @@ function parameter_search(item_id,make_flag=0){
                         <ul>
                             <li><a href="#name_tab">アイテム名</a></li>
                             <li><a href="#description_tab">アイテム説明文</a></li>
+                            <li><a href="#costume_tab">衣装</a></li>
                         </ul>
                         <div id="name_tab"></div>
                         <div id="description_tab"></div>
+                        <div id="costume_tab">
+                            <div class="result-list result-list_2columns">
+                                <ul id="costume_list_output">
+                                </ul>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </aside>
@@ -514,17 +506,16 @@ function parameter_search(item_id,make_flag=0){
 `);
     $(document).on("click", ".reset-btn", function () {
         $(".search_box.item_name.item_description").val("");
-        $("#item_list_output").html("");
+        $("#item_list_output").empty();
         $("#item_list_output2").empty();
+        $("#costume_list_output").empty();
     });
 
-    function make_prameter_item(param, param_name, param_array) {
-        if (param_array[0].checked == true) {
-            if (param) {
-                param += "&" + param_name + "=" + 1;
-            } else {
-                param = "" + param_name + "=" + 1;
-            }
+    function make_costume_prameter(param) {
+        if (param) {
+            param += "&costume=1";
+        } else {
+            param = "costume=1";
         }
         return param;
     }
@@ -541,11 +532,11 @@ function parameter_search(item_id,make_flag=0){
     function complementary_search(event, flg = false) {
         if (event.keyCode !== 13 && flg == 1) { return; }
         let item_list = document.getElementById('item_list_output');
+        let costume_list = document.getElementById('costume_list_output');
         var name_text = document.getElementsByClassName('item_name');
-        var costume = document.getElementsByClassName('costume1');
         var param = '';
         param = make_text_prameter(param, 'item_name', name_text);
-        // param = make_prameter_item(param, 'costume', costume);
+        param = make_costume_prameter(param);
 
         if (param) {
             $.ajax({
@@ -556,22 +547,27 @@ function parameter_search(item_id,make_flag=0){
             })
                 .done(function (data) {
                     var html = "";
+                    var costume_html = "";
                     if (data == "none") {
                         html += '<li class="alert_msg">ご指定のキーワードではアイテムが見つかりませんでした。</li>';
                         item_list.innerHTML = html
+                        costume_list.innerHTML = html;
                         return;
                     }
                     for (var i = 0; i < data.length; i++) {
-                        //検索履歴用にアイテム検索から遷移したフラグをsessionStorageに入れる
-                        // html += '<li class="search_result"><span class="icon-item"><img src="/images/item_icon/'+ data[i].item_icon + '.png"></span><a href="'+ data[i].item_id + '/'+ data[i].make_flag + '/" onclick="sessionStorage.setItem(\'came_from_results\', \'true\')" >' + data[i].item_name + '</a></li>';
-                        html += '<li class="search_result"><span class="icon-item"><img src="/images/item_icon/' + data[i].item_icon + '.png"></span><a href="' + data[i].item_id + '/' + data[i].make_flag + '/" class="history-link" data-id="' + data[i].item_id + '" data-name="' + data[i].item_name + '" data-make_flag="' + data[i].make_flag + '" data-icon="' + data[i].item_icon + '" >' + data[i].item_name + '</a></li>';
+                        if (data[i].item_name.startsWith("[衣装]")) {
+                            costume_html += '<li class="search_result"><span class="icon-item"><img src="/images/item_icon/' + data[i].item_icon + '.png"></span><a href="' + data[i].item_id + '/' + data[i].make_flag + '/" class="history-link" data-id="' + data[i].item_id + '" data-name="' + data[i].item_name + '" data-make_flag="' + data[i].make_flag + '" data-icon="' + data[i].item_icon + '" >' + data[i].item_name + '</a></li>';
+                        } else {
+                            html += '<li class="search_result"><span class="icon-item"><img src="/images/item_icon/' + data[i].item_icon + '.png"></span><a href="' + data[i].item_id + '/' + data[i].make_flag + '/" class="history-link" data-id="' + data[i].item_id + '" data-name="' + data[i].item_name + '" data-make_flag="' + data[i].make_flag + '" data-icon="' + data[i].item_icon + '" >' + data[i].item_name + '</a></li>';
+                        }
                     }
-                    item_list.innerHTML = html
-
+                    item_list.innerHTML = html? html : '<li class="alert_msg">ご指定のキーワードでは通常アイテムが見つかりませんでした。</li>';
+                    costume_list.innerHTML = costume_html? costume_html : '<li class="alert_msg">ご指定のキーワードでは衣装アイテムが見つかりませんでした。</li>';
                 })
                 .fail(function (XMLHttpRequest, textStatus, errorThrown) {
                     var html = '<p class="alert_msg">通信に失敗しました。時間をおいてお試しください。</p>';
-                    item_list.innerHTML = html
+                    item_list.innerHTML = html;
+                    costume_list.innerHTML = html;
                 });
         }
     };
@@ -579,8 +575,8 @@ function parameter_search(item_id,make_flag=0){
         if (event.keyCode !== 13 && flg == 1) { return; }
 
         let description_text = document.getElementsByClassName('item_description');
-        var costume = document.getElementsByClassName('costume2');
         let item_list = document.getElementById('item_list_output2');
+        let costume_list = document.getElementById('costume_list_output');
 
         var param = '';
         param = make_text_prameter(param, 'item_description', description_text);
@@ -592,7 +588,7 @@ function parameter_search(item_id,make_flag=0){
             param = param.replace('[', '［')
             param = param.replace(']', '］')
         }
-        // param = make_prameter_item(param, 'costume', costume);
+        param = make_costume_prameter(param);
 
         if (param) {
             $.ajax({
@@ -602,21 +598,28 @@ function parameter_search(item_id,make_flag=0){
             })
                 .done(function (data) {
                     var html = "";
+                    var costume_html = "";
                     if (data == "none") {
                         html += '<li class="alert_msg">ご指定のキーワードではアイテムが見つかりませんでした。</li>';
-                        item_list.innerHTML = html
+                        item_list.innerHTML = html;
+                        costume_list.innerHTML = html;
                         return;
                     }
                     for (var i = 0; i < data.length; i++) {
-                        html += '<li class="search_result"><span class="icon-item"><img src="/images/item_icon/' + data[i].item_icon + '.png"></span><a href="' + data[i].item_id + '/' + data[i].make_flag + '/" class="history-link" data-id="' + data[i].item_id + '" data-name="' + data[i].item_name + '" data-make_flag="' + data[i].make_flag + '" data-icon="' + data[i].item_icon + '" >' + data[i].item_name + '</a> ' + data[i].description_search + '</li>';
+                        if (data[i].item_name.startsWith("[衣装]")) {
+                            costume_html += '<li class="search_result"><span class="icon-item"><img src="/images/item_icon/' + data[i].item_icon + '.png"></span><a href="' + data[i].item_id + '/' + data[i].make_flag + '/" class="history-link" data-id="' + data[i].item_id + '" data-name="' + data[i].item_name + '" data-make_flag="' + data[i].make_flag + '" data-icon="' + data[i].item_icon + '" >' + data[i].item_name + '</a></li>';
+                        } else {
+                            html += '<li class="search_result"><span class="icon-item"><img src="/images/item_icon/' + data[i].item_icon + '.png"></span><a href="' + data[i].item_id + '/' + data[i].make_flag + '/" class="history-link" data-id="' + data[i].item_id + '" data-name="' + data[i].item_name + '" data-make_flag="' + data[i].make_flag + '" data-icon="' + data[i].item_icon + '" >' + data[i].item_name + '</a> ' + data[i].description_search + '</li>';
+                        }
                     }
-                    item_list.innerHTML = html
-
+                    item_list.innerHTML = html? html : '<li class="alert_msg">ご指定のキーワードでは通常アイテムが見つかりませんでした。</li>';
+                    costume_list.innerHTML = costume_html? costume_html : '<li class="alert_msg">ご指定のキーワードでは衣装アイテムが見つかりませんでした。</li>';
                 })
                 // Ajaxリクエストが失敗した場合
                 .fail(function (XMLHttpRequest, textStatus, errorThrown) {
                     var html = '<p class="alert_msg">通信に失敗しました。時間をおいてお試しください。</p>';
-                    item_list.innerHTML = html
+                    item_list.innerHTML = html;
+                    costume_list.innerHTML = html;
                 });
         }
     };
