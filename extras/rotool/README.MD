@@ -4,20 +4,22 @@
 
 アイテム検索の画面遷移による複数検索の使いにくさや履歴情報へのアクセスの遠さなどUIを見直し、3カラム構成のアイテム検索に作り替えます。  
 
-## Setup
+### Setup
+* XXXmonkey UserScript (Tampermonkey で確認)  
+    * [UserScript](https://rag769.github.io/extras/rotool/item_search_3c.user.js)
 
 * 下記をBookmarkletとして登録してください
     ```
     javascript:(function(){$.getScript("https://rag769.github.io/extras/rotool/item_search_3c.min.js");})();
     ```
 
-## How to use
+### How to use
 
 1. [RO公式ツールのアイテム検索](https://rotool.gungho.jp/item/) を開きます。
 
 1. 登録したBookmarkletを実行します。それだけ
 
-## Simple manual
+### Simple manual
 
 #### サンプル画像
 
@@ -37,7 +39,7 @@
     名前の横の☆をクリックするとお気に入りの登録と解除ができます
 1. 公式の「検索履歴」「注目アイテム」に加えて独自実装した「お気に入り」の一覧をタブ分割して表示します
 
-## Notes
+### Notes
 
 * この拡張を使って発生したいかなる損害に関しても責任は負いません。
 * 「とりあえず動けばいい」の雑実装なので、多くを期待してはいけません。  
@@ -63,7 +65,7 @@
 
 ![サンプル画像](images/ff.png)
 
-## Setup
+### Setup
 * Greaseonkey・Tampermonkey UserScript (作者は Tampermonkey で確認)  
     * [フィルタのみ](https://rag769.github.io/extras/rotool/trade_filter.user.js)
     * [フィルタ＋グラフ](https://rag769.github.io/extras/rotool/trade_filter_scatter.user.js)
@@ -78,7 +80,7 @@
     javascript:(function(){$.getScript("https://rag769.github.io/extras/rotool/trade_filter_scatter.min.js");})();
     ```
 
-## How to use
+### How to use
 ※ XxxmonkeyのUserScriptをインストールしている場合は普通に無視してください ※
 
 1. RO公式ツールでアイテム検索します
@@ -86,7 +88,7 @@
 1. Setup のどちらかを実施します。  
     アイテム検索後のページでのみ有効です。リロード、別アイテム検索などした場合は再度実施してください。
 
-## Notes
+### Notes
 
 * この拡張を使って発生したいかなる損害に関しても責任は負いません。
 * 「とりあえず動けばいい」の雑実装なので、多くを期待してはいけません。  
