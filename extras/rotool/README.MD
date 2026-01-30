@@ -5,6 +5,7 @@
 アイテム検索の画面遷移による複数検索の使いにくさや履歴情報へのアクセスの遠さなどUIを見直し、3カラム構成のアイテム検索に作り替えます。  
 
 ### Setup
+次のどちらかで利用してください。XXXmonkey系に抵抗がないなら、自動で適用されるので楽です。
 * XXXmonkey UserScript (Tampermonkey で確認)  
     * [UserScript](https://rag769.github.io/extras/rotool/item_search_3c.user.js)
 
