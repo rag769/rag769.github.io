@@ -4,10 +4,10 @@
 // @description RO公式ツール アイテム検索を画面遷移不要の3カラムに再構成
 // @author      rag769
 // @match       https://rotool.gungho.jp/item/
-// @version     1.0.0
+// @version     1.0.1
 // @require     https://code.jquery.com/jquery-3.7.1.min.js
 // @require     https://code.jquery.com/ui/1.14.1/jquery-ui.min.js
-// @require     https://rotool.gungho.jp/js/itemdetial.js
+// @require     https://rotool.gungho.jp/js/itemdetial.js?ver=5.0.0
 // @require     https://cdn.jsdelivr.net/npm/chart.js
 // @require     https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns
 // @grant       none
@@ -803,6 +803,13 @@ function parameter_search(item_id,make_flag=0){
             parameter_search(link.dataset.id, link.dataset.make_flag);
             const $title = $('#center_content h1.conent-ttl');
             Object.entries(link.dataset).forEach(([key, val]) => $title.data(key, val));
+            $("#center_content .parameter-control .btn").removeAttr("onclick").off("click");
+            $("#center_content .parameter-control .btn:first").on("click", function () {
+                display_change('Normal_Coefficient','Normal_Coefficient_Summary','Noatun_Coefficient','Noatun_Coefficient_Summary');
+            });
+            $("#center_content .parameter-control .btn:last").on("click", function () {
+                display_change('Noatun_Coefficient','Noatun_Coefficient_Summary','Normal_Coefficient','Normal_Coefficient_Summary');
+            });
             if (existsInFavorite($title.data('name'))) {
                 $('#center_content h1.conent-ttl').append('<i class="fav-icon fas fa-star" style="cursor:pointer; margin-left:10px; color: #f1c40f"></i>');
             } else {
