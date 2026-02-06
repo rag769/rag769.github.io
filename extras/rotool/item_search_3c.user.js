@@ -4,7 +4,7 @@
 // @description RO公式ツール アイテム検索を画面遷移不要の3カラムに再構成
 // @author      rag769
 // @match       https://rotool.gungho.jp/item/
-// @version     1.0.1
+// @version     1.1.0
 // @require     https://code.jquery.com/jquery-3.7.1.min.js
 // @require     https://code.jquery.com/ui/1.14.1/jquery-ui.min.js
 // @require     https://rotool.gungho.jp/js/itemdetial.js?ver=5.0.0
@@ -17,6 +17,7 @@
     $('.site-logo').parent().html(function (_, html) {
         return html.replace('公式ツール', '公式ツール [非公式拡張]');
     });
+    $("main").hide();
     const meta = `
     <link rel="stylesheet" href="https://code.jquery.com/ui/1.14.1/themes/base/jquery-ui.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
@@ -89,7 +90,6 @@
         .sidebar {
             width: var(--sidebar-width, 450px);
             flex: 0 0 var(--sidebar-width, 450px);
-            transition: width 0.3s ease, flex-basis 0.3s ease, opacity 0.3s ease;
             position: relative;
         }
 
@@ -137,6 +137,25 @@
     </style>
     <script>
         $(document).ready(function () {
+            function applySettings() {
+                const settings = JSON.parse(localStorage.getItem('sidebarSettings')) || {};
+                Object.entries(settings).forEach(([key, value]) => {
+                    const $sidebar = $("#" + key.replace("_hidden", ""));
+                    if (value) {
+                        $sidebar.addClass('is-hidden');
+                    } else {
+                        $sidebar.removeClass('is-hidden');
+                    }
+                });
+            }
+            applySettings();
+
+            function updateSidebarSettings($sidebar) {
+                const settings = JSON.parse(localStorage.getItem('sidebarSettings')) || {};
+                settings[$sidebar.attr('id')+"_hidden"] = $sidebar.hasClass('is-hidden');
+                localStorage.setItem('sidebarSettings', JSON.stringify(settings));
+            }
+
             function updateButton($sidebar, side, $btn) {
                 const isHidden = $sidebar.hasClass('is-hidden');
                 const $icon = $btn.find('.icon');
@@ -152,6 +171,7 @@
             function toggleSidebar($sidebar, side, $btn) {
                 $sidebar.toggleClass('is-hidden');
                 updateButton($sidebar, side, $btn);
+                updateSidebarSettings($sidebar);
             }
 
             const $leftSidebar = $('#leftSidebar');
@@ -417,9 +437,9 @@ function parameter_search(item_id,make_flag=0){
 `;
     const titlebar_side_left = `
             <div class="titlebar-side">
-                <button class="title-btn" id="toggleLeft" type="button" aria-expanded="true"
+                <button class="title-btn" id="toggleLeft" type="button" aria-expanded="false"
                     aria-controls="leftSidebar">
-                    <span class="icon">✕</span>
+                    <span class="icon">≡</span>
                 </button>
             </div>
 `;
@@ -434,7 +454,7 @@ function parameter_search(item_id,make_flag=0){
     const contents = `
     <div class="app">
         <div class="container">
-            <aside class="sidebar left-sidebar" id="leftSidebar" aria-hidden="false">
+            <aside class="sidebar left-sidebar is-hidden" id="leftSidebar" aria-hidden="true">
                 <div class="sidebar-content search">
                     <div id="search_tabs">
                         <ul>
@@ -494,6 +514,14 @@ function parameter_search(item_id,make_flag=0){
     $(".two-column-container section.content-wrap").slice(0, 1).appendTo("#history_tab");
     $("#list_tabs").tabs();
     $("#search_tabs").tabs();
+    const settings = JSON.parse(localStorage.getItem("tabSettings")) || {};
+    $("#list_tabs").tabs("option", "active", settings["list_tabs"] || 0);
+    $("#search_tabs").tabs("option", "active", settings["search_tabs"] || 0);
+    $("#list_tabs,#search_tabs").on("tabsactivate", function (_, ui) {
+        const settings = JSON.parse(localStorage.getItem("tabSettings")) || {};
+        settings[$(this).attr("id")] = $(this).tabs("option", "active");
+        localStorage.setItem("tabSettings", JSON.stringify(settings));
+    });
 
     // 左カラム
     $(".item_name").removeClass("item_name");
@@ -886,5 +914,5 @@ function parameter_search(item_id,make_flag=0){
         }
         displayFavorite();
     });
+    $("main").show();
 })(jQuery);
-
