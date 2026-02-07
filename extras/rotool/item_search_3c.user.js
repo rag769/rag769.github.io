@@ -4,7 +4,7 @@
 // @description RO公式ツール アイテム検索を画面遷移不要の3カラムに再構成
 // @author      rag769
 // @match       https://rotool.gungho.jp/item/
-// @version     1.1.0
+// @version     1.1.1
 // @require     https://code.jquery.com/jquery-3.7.1.min.js
 // @require     https://code.jquery.com/ui/1.14.1/jquery-ui.min.js
 // @require     https://rotool.gungho.jp/js/itemdetial.js?ver=5.0.0
@@ -31,7 +31,7 @@
             display: flex;
             flex-direction: column;
             background: #f7f8fa;
-            min-height: calc(100vh - var(--footer-height, 85px) - var(--header-height, 60px));
+            height: calc(100vh - var(--footer-height, 85px) - var(--header-height, 60px));
         }
 
         .titlebar-side {
@@ -91,6 +91,7 @@
             width: var(--sidebar-width, 450px);
             flex: 0 0 var(--sidebar-width, 450px);
             position: relative;
+            overflow-y: auto;
         }
 
         .sidebar-content {
@@ -110,6 +111,7 @@
             padding: 24px;
             box-shadow: inset 0 0 0 1px #e5e7eb;
             min-width: 0;
+            overflow-y: auto;
         }
 
         /* 隠す時のクラス */

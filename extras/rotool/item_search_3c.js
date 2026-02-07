@@ -18,7 +18,7 @@ $(function () {
             display: flex;
             flex-direction: column;
             background: #f7f8fa;
-            min-height: calc(100vh - var(--footer-height, 85px) - var(--header-height, 60px));
+            height: calc(100vh - var(--footer-height, 85px) - var(--header-height, 60px));
         }
 
         .titlebar-side {
@@ -78,6 +78,7 @@ $(function () {
             width: var(--sidebar-width, 450px);
             flex: 0 0 var(--sidebar-width, 450px);
             position: relative;
+            overflow-y: auto;
         }
 
         .sidebar-content {
@@ -97,6 +98,7 @@ $(function () {
             padding: 24px;
             box-shadow: inset 0 0 0 1px #e5e7eb;
             min-width: 0;
+            overflow-y: auto;
         }
 
         /* 隠す時のクラス */
