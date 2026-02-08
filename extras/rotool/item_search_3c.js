@@ -2,7 +2,7 @@ $(function () {
     (() => {
         if ($('#center_content').length > 0) return;
         $('.site-logo').parent().html(function (_, html) {
-            return html.replace('公式ツール', '公式ツール [非公式拡張]');
+            return html.replace('公式ツール', '公式ツール [非公式拡張 v1.1.2]');
         });
         $("main").hide();
         const meta = `
@@ -584,18 +584,22 @@ function parameter_search(item_id,make_flag=0){
                         if (data == "none") {
                             html += '<li class="alert_msg">ご指定のキーワードではアイテムが見つかりませんでした。</li>';
                             item_list.innerHTML = html
-                            costume_list.innerHTML = html;
+                            if ($(costume_list).children().length == 0) {
+                                costume_list.innerHTML = html;
+                            }
                             return;
                         }
                         for (var i = 0; i < data.length; i++) {
                             if (data[i].item_name.startsWith("[衣装]")) {
-                                costume_html += '<li class="search_result"><span class="icon-item"><img src="/images/item_icon/' + data[i].item_icon + '.png"></span><a href="' + data[i].item_id + '/' + data[i].make_flag + '/" class="history-link" data-id="' + data[i].item_id + '" data-name="' + data[i].item_name + '" data-make_flag="' + data[i].make_flag + '" data-icon="' + data[i].item_icon + '" >' + data[i].item_name + '</a></li>';
+                                $(costume_list).append('<li class="search_result"><span class="icon-item"><img src="/images/item_icon/' + data[i].item_icon + '.png"></span><a href="' + data[i].item_id + '/' + data[i].make_flag + '/" class="history-link" data-id="' + data[i].item_id + '" data-name="' + data[i].item_name + '" data-make_flag="' + data[i].make_flag + '" data-icon="' + data[i].item_icon + '" >' + data[i].item_name + '</a></li>');
                             } else {
                                 html += '<li class="search_result"><span class="icon-item"><img src="/images/item_icon/' + data[i].item_icon + '.png"></span><a href="' + data[i].item_id + '/' + data[i].make_flag + '/" class="history-link" data-id="' + data[i].item_id + '" data-name="' + data[i].item_name + '" data-make_flag="' + data[i].make_flag + '" data-icon="' + data[i].item_icon + '" >' + data[i].item_name + '</a></li>';
                             }
                         }
-                        item_list.innerHTML = html? html : '<li class="alert_msg">ご指定のキーワードではアイテムが見つかりませんでした。</li>';
-                        costume_list.innerHTML = costume_html? costume_html : '<li class="alert_msg">ご指定のキーワードではアイテムが見つかりませんでした。</li>';
+                        item_list.innerHTML = html ? html : '<li class="alert_msg">ご指定のキーワードではアイテムが見つかりませんでした。</li>';
+                        if ($(costume_list).children().length == 0) {
+                            costume_list.innerHTML = '<li class="alert_msg">ご指定のキーワードでは衣装アイテムが見つかりませんでした。</li>';
+                        }
                     })
                     .fail(function (XMLHttpRequest, textStatus, errorThrown) {
                         var html = '<p class="alert_msg">通信に失敗しました。時間をおいてお試しください。</p>';
@@ -635,18 +639,22 @@ function parameter_search(item_id,make_flag=0){
                         if (data == "none") {
                             html += '<li class="alert_msg">ご指定のキーワードではアイテムが見つかりませんでした。</li>';
                             item_list.innerHTML = html
-                            costume_list.innerHTML = html;
+                            if ($(costume_list).children().length == 0) {
+                                costume_list.innerHTML = html;
+                            }
                             return;
                         }
                         for (var i = 0; i < data.length; i++) {
                             if (data[i].item_name.startsWith("[衣装]")) {
-                                costume_html += '<li class="search_result"><span class="icon-item"><img src="/images/item_icon/' + data[i].item_icon + '.png"></span><a href="' + data[i].item_id + '/' + data[i].make_flag + '/" class="history-link" data-id="' + data[i].item_id + '" data-name="' + data[i].item_name + '" data-make_flag="' + data[i].make_flag + '" data-icon="' + data[i].item_icon + '" >' + data[i].item_name + '</a></li>';
+                                $(costume_list).append('<li class="search_result"><span class="icon-item"><img src="/images/item_icon/' + data[i].item_icon + '.png"></span><a href="' + data[i].item_id + '/' + data[i].make_flag + '/" class="history-link" data-id="' + data[i].item_id + '" data-name="' + data[i].item_name + '" data-make_flag="' + data[i].make_flag + '" data-icon="' + data[i].item_icon + '" >' + data[i].item_name + '</a></li>');
                             } else {
                                 html += '<li class="search_result"><span class="icon-item"><img src="/images/item_icon/' + data[i].item_icon + '.png"></span><a href="' + data[i].item_id + '/' + data[i].make_flag + '/" class="history-link" data-id="' + data[i].item_id + '" data-name="' + data[i].item_name + '" data-make_flag="' + data[i].make_flag + '" data-icon="' + data[i].item_icon + '" >' + data[i].item_name + '</a> ' + data[i].description_search + '</li>';
                             }
                         }
-                        item_list.innerHTML = html? html : '<li class="alert_msg">ご指定のキーワードでは通常アイテムが見つかりませんでした。</li>';
-                        costume_list.innerHTML = costume_html? costume_html : '<li class="alert_msg">ご指定のキーワードでは衣装アイテムが見つかりませんでした。</li>';
+                        item_list.innerHTML = html ? html : '<li class="alert_msg">ご指定のキーワードでは通常アイテムが見つかりませんでした。</li>';
+                        if ($(costume_list).children().length == 0) {
+                            costume_list.innerHTML = '<li class="alert_msg">ご指定のキーワードでは衣装アイテムが見つかりませんでした。</li>';
+                        }
                     })
                     // Ajaxリクエストが失敗した場合
                     .fail(function (XMLHttpRequest, textStatus, errorThrown) {
@@ -658,6 +666,9 @@ function parameter_search(item_id,make_flag=0){
         };
 
         $(document).on("keydown", "#item_name", function (e) {
+            if (e.keyCode == 13) {
+                $('#costume_list_output').empty();
+            }
             complementary_search(e, 1);
             complementary_search_description(e, 1);
         });
