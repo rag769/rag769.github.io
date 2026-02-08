@@ -439,9 +439,9 @@ function parameter_search(item_id,make_flag=0){
 `;
     const titlebar_side_left = `
             <div class="titlebar-side">
-                <button class="title-btn" id="toggleLeft" type="button" aria-expanded="false"
+                <button class="title-btn" id="toggleLeft" type="button" aria-expanded="true"
                     aria-controls="leftSidebar">
-                    <span class="icon">≡</span>
+                    <span class="icon">✕</span>
                 </button>
             </div>
 `;
@@ -456,7 +456,7 @@ function parameter_search(item_id,make_flag=0){
     const contents = `
     <div class="app">
         <div class="container">
-            <aside class="sidebar left-sidebar is-hidden" id="leftSidebar" aria-hidden="true">
+            <aside class="sidebar left-sidebar" id="leftSidebar" aria-hidden="false">
                 <div class="sidebar-content search">
                     <div id="search_tabs">
                         <ul>
