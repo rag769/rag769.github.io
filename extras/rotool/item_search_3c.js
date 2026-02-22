@@ -2,7 +2,7 @@ $(function () {
     (() => {
         if ($('#center_content').length > 0) return;
         $('.site-logo').parent().html(function (_, html) {
-            return html.replace('公式ツール', '公式ツール [非公式拡張 v1.1.3]');
+            return html.replace('公式ツール', '公式ツール [非公式拡張 v1.1.4]');
         });
         $("main").hide();
         const meta = `
@@ -181,6 +181,26 @@ $(function () {
         });
     </script>
 <script>
+function display_change(dsiplay1, dsiplay2, hidden1, hidden2) {
+    document.getElementById(hidden1).style.display = "none"
+    document.getElementById(hidden2).style.display = "none"
+    document.getElementById(dsiplay1).style.display = "block"
+    document.getElementById(dsiplay2).style.display = "block"
+}
+function display_block(dsiplay) {
+    document.getElementById(dsiplay).style.display = "block"
+}
+function display_none(dsiplay) {
+    document.getElementById(dsiplay).style.display = "none"
+}
+function display_change2(target) {
+    const p1 = document.getElementById(target);
+    if (p1.style.display == "block") {
+        p1.style.display = "none";
+    } else {
+        p1.style.display = "block";
+    }
+}
 //パラメーターを作る関数
 function make_prameter(param,param_name,param_array){
     for ( i = 0; i < param_array.length; i++) {
@@ -848,11 +868,9 @@ function parameter_search(item_id,make_flag=0){
             $.get(link.href, function (data) {
                 const article = $(data).find('article');
                 $('#center_content').html(article);
-                $.getScript("https://rotool.gungho.jp/js/itemdetial.js?ver=5.0.0", () => {
-                    display_none('item-drop-monster-list');
-                    display_none('item-drop-map-list');
-                    parameter_search(link.dataset.id, link.dataset.make_flag);
-                });
+                display_none('item-drop-monster-list');
+                display_none('item-drop-map-list');
+                parameter_search(link.dataset.id, link.dataset.make_flag);
                 const $title = $('#center_content h1.conent-ttl');
                 Object.entries(link.dataset).forEach(([key, val]) => $title.data(key, val));
                 if (existsInFavorite($title.data('name'))) {
