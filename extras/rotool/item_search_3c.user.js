@@ -14,7 +14,7 @@
 (($) => {
     if ($('#center_content').length > 0) return;
     $('.site-logo').parent().html(function (_, html) {
-        return html.replace('公式ツール', '公式ツール [非公式拡張 v1.1.3]');
+        return html.replace('公式ツール', '公式ツール [非公式拡張 v1.1.4]');
     });
     $("main").hide();
     const meta = `
