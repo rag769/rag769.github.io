@@ -4,10 +4,9 @@
 // @description RO公式ツール アイテム検索を画面遷移不要の3カラムに再構成
 // @author      rag769
 // @match       https://rotool.gungho.jp/item/
-// @version     1.1.3
+// @version     1.1.4
 // @require     https://code.jquery.com/jquery-3.7.1.min.js
 // @require     https://code.jquery.com/ui/1.14.1/jquery-ui.min.js
-// @require     https://rotool.gungho.jp/js/itemdetial.js?ver=5.0.0
 // @require     https://cdn.jsdelivr.net/npm/chart.js
 // @require     https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns
 // @grant       none
@@ -194,6 +193,26 @@
         });
     </script>
 <script>
+function display_change(dsiplay1, dsiplay2, hidden1, hidden2) {
+    document.getElementById(hidden1).style.display = "none"
+    document.getElementById(hidden2).style.display = "none"
+    document.getElementById(dsiplay1).style.display = "block"
+    document.getElementById(dsiplay2).style.display = "block"
+}
+function display_block(dsiplay) {
+    document.getElementById(dsiplay).style.display = "block"
+}
+function display_none(dsiplay) {
+    document.getElementById(dsiplay).style.display = "none"
+}
+function display_change2(target) {
+    const p1 = document.getElementById(target);
+    if (p1.style.display == "block") {
+        p1.style.display = "none";
+    } else {
+        p1.style.display = "block";
+    }
+}
 //パラメーターを作る関数
 function make_prameter(param,param_name,param_array){
     for ( i = 0; i < param_array.length; i++) {
